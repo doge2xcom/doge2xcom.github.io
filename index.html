@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+    <style>
+        .container {
+            max-width: 600px;
+        }
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link,
+        .bg-doge {
+            background-color:#c6993d;
+        }
+        .border-doge {
+            border-color:#c6993d;
+        }
+    </style>
+    <title>DOGE2x - To the moon!</title>
+</head>
+<body>
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12 text-center">
+            <img class="w-50 mb-3" src="https://raw.githubusercontent.com/42points/doge_assets/master/assets/Logos/Vector/clean.vector.svg">
+
+            <h3 class="mb-4">🚀🚀🚀</h3>
+
+            <div class="content">
+                <div class="row justify-content-center">
+                    <div class="col-8 pt-3">
+                        <form id="private">
+                            <div class="form-group">
+                                <label>Access code:</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-warning bg-doge border-doge">Enter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+        new ClipboardJS('.btn-copy');
+
+        let per = 28.93518518518519;
+        let max = 10000000;
+        let sec = 345600;
+        let end = new Date("2021-05-10 08:00:00");
+        let secure = 'U05MTUFZOA==';
+
+        $('#private').on('submit', function(e) {
+            e.preventDefault();
+            if( btoa($(this).find('input').val().toUpperCase()) !== secure ) {
+                alert('Invalid!');
+            } else {
+                $(this).find('input').prop('disabled', true);
+                $(this).find('button').prop('disabled', true);
+                setTimeout(function() {
+                    content();
+                }, 1750);
+            }
+        })
+
+        let updateQuantity = function() {
+            let secondBetweenTwoDate = Math.abs((end.getTime() - new Date().getTime()) / 1000);
+            let left = max - ( ( sec - secondBetweenTwoDate ) * per );
+            let percent = left / max * 100;
+
+            $('#remaining').text(addCommas(left.toFixed(6)));
+            $('.progress-bar').width(percent+'%').attr('aria-valuenow', percent);
+        };
+
+        let addCommas = function(x) {
+            let p = x.toString().split('.');
+            return p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"."+p[1];
+        };
+
+        let content = function() {
+            $.get('private/content.html', function(d) {
+                $('.content').html(d);
+                updateQuantity();
+                setInterval(updateQuantity, 5000);
+            });
+        };
+    })
+</script>
+</body>
+</html>
